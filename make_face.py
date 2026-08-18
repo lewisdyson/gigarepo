@@ -64,8 +64,8 @@ PORTRAIT = [
     cf('.ssssssssss.'),   # jaw taper
     cf('...ssssss...'),   # neck
     '....' + 'tttttt' + 'ssss' + 'tttttt' + '....',   # tee, crew neck
-    '...' + 's' + 'tttttttttttttttt' + 's' + '...',   # bare arms
-    '...' + 's' + 'tttttttttttttttt' + 's' + '...',
+    '...' + 'tttttttttttttttttt' + '...',             # sleeves cover the shoulders
+    '...' + 's' + 'tttttttttttttttt' + 's' + '...',   # sleeve hem, arms below
     center(''),
 ]
 
@@ -100,10 +100,10 @@ def c8(mid, width=W16):
 
 _CROWN = ['................', '....hhhhhhhh....',
           '...hHhhhHhhHh...', '...hhhhhhhhhh...']
-_TEE = ['...tttttttttt...',      # shoulders
-        '..stttttttttts..',      # bare arms
+_TEE = ['..tttttttttttt..',      # shoulders and sleeves, arms covered
+        '..tttttttttttt..',      # sleeve
+        '..stttttttttts..',      # sleeve hem: forearms bare below it
         '..stttttttttts..',
-        '...tttttttttt...',
         '...bbbbbbbbbb...']      # trousers
 _LEGS = '....bbb..bbb....'
 _LEGS_WALK = '...bbb....bbb...'
@@ -134,10 +134,10 @@ SIDE = ['................', '....hhhhhhh.....',
     '...h' + 'sssssss' + '.....',
     '...h' + 'sshhsss' + '.....',
     '....' + '.ssss..' + '.....',
-    '...' + 'ttttttt' + '......',
-    '..s' + 'ttttttt' + 't.....',
-    '..s' + 'ttttttt' + 't.....',
-    '...' + 'ttttttt' + '......',
+    '..' + 'tttttttt' + '......',   # shoulder and sleeve
+    '..' + 'tttttttt' + '......',
+    '..s' + 'ttttttt' + '......',   # sleeve hem, forearm bare
+    '..s' + 'ttttttt' + '......',
     '...' + 'bbbbbbb' + '......',
     '....bb.bb.......', '................',
 ]
