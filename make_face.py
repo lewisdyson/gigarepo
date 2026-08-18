@@ -33,40 +33,39 @@ def fr(face12, locl, locr):
     return row
 
 
-# Hermes Conrad style: heavy crown, two locs per side hanging to the shoulder
-# with staggered tips so they read as hair rather than a row of bars.
-_FACE = [
-    'ssssssssssss',   # forehead
-    'ssssssssssss',
-    'sshhhsshhhss',   # eyebrows
-    'ssssssssssss',
-    'sseesssseess',   # eyes, 2x2 (large eyes read young)
-    'sseesssseess',
-    'ssssssssssss',
-    'sssssSSsssss',   # nose, 2px only
-    'ssssssssssss',
-    'sssshhhhssss',   # mustache, thin
-    'sssssSSsssss',   # mouth, subtle
-    'ssssssssssss',   # chin
-    '.ssssssssss.',   # jaw taper
-    '..ssssssss..',   # neck
-]
-# Loc length per face row: full, then tapering to nothing by the shoulders.
-_LOCS = ['hH.hH'] * 9 + ['.h.hH', '...hH', '...hH', '....h', '.....']
+# Cropped hair with faded sides (the original shape), the younger face, and a tee.
+def cf(face12):
+    """Centred face row: 6 pad + 12 face + 6 pad = 24."""
+    assert len(face12) == 12, face12
+    row = '......' + face12 + '......'
+    assert len(row) == W24, (len(row), row)
+    return row
 
-PORTRAIT = [center('')]
-PORTRAIT += [
+
+PORTRAIT = [
+    center(''),
+    center('hhhhhhhh'),
+    center('hhHhhhhHhhhh'),
+    center('hhHhhhHhhhhHhh'),
     center('hhhhhhhhhhhhhh'),
-    center('hhhhhhhhhhhhhhhhhh'),
-    center('hhhhhhhhhhhhhhhhhhhhhh'),
-    '.' + 'hhhhh' + 'hhhhhhhhhhhh' + 'hhhhh' + '.',   # solid crown before the locs split
-]
-PORTRAIT += [fr(f, l, l[::-1]) for f, l in zip(_FACE, _LOCS)]
-PORTRAIT += [
-    '....' + 'jjjjjwwwwjjjjj' + '......',             # shoulders
-    '..' + 'jjjjjjjj' + 'wttw' + 'jjjjjjjj' + '..',
-    '..' + 'jjjjjjjj' + 'wttw' + 'jjjjjjjj' + '..',
-    '..' + 'jjjjjjjjj' + 'tt' + 'jjjjjjjjj' + '..',
+    center('hhhhhhhhhhhhhh'),
+    '.....' + 'hh' + 'ssssssssss' + 'hh' + '.....',   # hairline, faded temples
+    '.....' + 'h' + 'ssssssssssss' + 'h' + '.....',
+    cf('ssssssssssss'),   # forehead
+    cf('sshhhsshhhss'),   # eyebrows
+    cf('ssssssssssss'),
+    cf('sseesssseess'),   # eyes, 2x2 (large eyes read young)
+    cf('sseesssseess'),
+    cf('ssssssssssss'),
+    cf('sssssSSsssss'),   # nose, 2px only
+    cf('sssshhhhssss'),   # mustache, thin
+    cf('sssssSSsssss'),   # mouth, subtle
+    cf('ssssssssssss'),   # chin
+    cf('.ssssssssss.'),   # jaw taper
+    cf('...ssssss...'),   # neck
+    '....' + 'tttttt' + 'ssss' + 'tttttt' + '....',   # tee, crew neck
+    '...' + 's' + 'tttttttttttttttt' + 's' + '...',   # bare arms
+    '...' + 's' + 'tttttttttttttttt' + 's' + '...',
     center(''),
 ]
 
@@ -88,51 +87,58 @@ def br(body10, edge=('.', '.')):
     return row
 
 
+def f8(face8):
+    """Face row with faded-hair temples: 3 pad + h + 8 face + h + 3 pad = 16."""
+    row = '...h' + face8 + 'h...'
+    assert len(row) == W16, (len(row), row)
+    return row
+
+
+def c8(mid, width=W16):
+    return center(mid, width)
+
+
 _CROWN = ['................', '....hhhhhhhh....',
-          '..hhhhhhhhhhhh..', '..hhhhhhhhhhhh..']
+          '...hHhhhHhhHh...', '...hhhhhhhhhh...']
+_TEE = ['...tttttttttt...',      # shoulders
+        '..stttttttttts..',      # bare arms
+        '..stttttttttts..',
+        '...tttttttttt...',
+        '...bbbbbbbbbb...']      # trousers
 _LEGS = '....bbb..bbb....'
 _LEGS_WALK = '...bbb....bbb...'
 
 FRONT = _CROWN + [
-    hr('ssssssss'),      # forehead
-    hr('sesssses'),      # eyes
-    hr('ssssssss'),
-    hr('ssshhsss'),      # mustache, 2px
-    hr('ssssssss'),      # jaw, locs still hanging
-    br('jjjwwwwjjj', ('h', 'h')),   # shoulders, loc tips resting on them
-    br('jjjwttwjjj'),
-    br('jjjwttwjjj'),
-    br('jjjjttjjjj'),
-    br('jjjjjjjjjj'),
-    _LEGS, '................',
-]
+    f8('ssssssss'),      # forehead, temples faded
+    c8('seessees'),      # eyes, 2px wide
+    c8('ssssssss'),
+    c8('ssshhsss'),      # mustache, 2px
+    c8('..ssss..'),      # chin into neck
+] + _TEE + [_LEGS, '................']
 FRONT_WALK = FRONT[:14] + [_LEGS_WALK, '................']
 
 BACK = _CROWN + [
-    hr('hhhhhhhh'), hr('hhhhhhhh'), hr('hhhhhhhh'), hr('hhhhhhhh'),
-    hr('hhsssshh'),                 # nape showing between the locs
-    br('jjjjjjjjjj', ('h', 'h')),
-    br('jjjjjjjjjj'),
-    br('jjjjjjjjjj'),
-    br('jjjjjjjjjj'),
-    br('jjjjjjjjjj'),
-    _LEGS, '................',
-]
+    f8('hhhhhhhh'),
+    c8('hhhhhhhh'),
+    c8('hhhhhhhh'),
+    c8('.hhhhhh.'),
+    c8('..ssss..'),      # nape
+] + _TEE + [_LEGS, '................']
 BACK_WALK = BACK[:14] + [_LEGS_WALK, '................']
 
-# Side view: locs bunch behind the head, face reads as a profile.
-SIDE = ['................', '...hhhhhhhh.....',
-        '..hhhhhhhhhh....', '..hhhhhhhhhh....'] + [
-    '..hH' + 'sssssss' + '.....',
-    '..hH' + 'ssesss' + 's' + '.....',
-    '..hH' + 'sssssss' + '.....',
-    '..hH' + 'sshhsss' + '.....',
-    '..hH' + 'sssssss' + '.....',
-    '..h' + 'jjjwwwwj' + '.....',
-    '...' + 'jjjwtwjj' + '.....',
-    '...' + 'jjjwtwjj' + '.....',
-    '...' + 'jjjjttjj' + '.....',
-    '...' + 'jjjjjjjj' + '.....',
+# Side view: profile, one eye, hair cropped close at the back.
+SIDE = ['................', '....hhhhhhh.....',
+        '...hHhhhHhh.....', '...hhhhhhhh.....'] + [
+    '...h' + 'sssssss' + '.....',
+    '...h' + 'sseesss' + '.....',
+    '...h' + 'sssssss' + '.....',
+    '...h' + 'sshhsss' + '.....',
+    '....' + '.ssss..' + '.....',
+    '...' + 'ttttttt' + '......',
+    '..s' + 'ttttttt' + 't.....',
+    '..s' + 'ttttttt' + 't.....',
+    '...' + 'ttttttt' + '......',
+    '...' + 'bbbbbbb' + '......',
     '....bb.bb.......', '................',
 ]
 SIDE_WALK = SIDE[:14] + ['....bb...bb.....', '................']
